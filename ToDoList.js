@@ -6,10 +6,10 @@
 
 /*
 * @let list
-* @Descripcion: Un array vacio*/
+* @Descripcion: se guarda en LocalStorag un array vacio*/
 
-let list = [];
 
+let list = JSON.parse(localStorage.getItem("tareas")) || [];
 /*
 * @function agregar
 * @Descripcion: Funcion que agrega tareas a la lista
@@ -17,6 +17,8 @@ let list = [];
             {function agregar} - Si no se ha escrito nada en el Prompt,
             {function agregar} - Si se ha escrito un numero en el prompt
 */
+
+mostrarLista();
 function agregar() {
   let tarea = prompt("Escribe una tarea\n\nPara salir presiona 'CANCELAR'");
   if (tarea === null) {
@@ -35,7 +37,7 @@ function agregar() {
     completada: false
   }
   list.push(tarea_object);
-  console.log(tarea_object)
+  localStorage.setItem("tareas", JSON.stringify(list));
   mostrarLista();
 }
 
@@ -52,6 +54,7 @@ function completar() {
     if (numeroTarea(tareaCompletada)) {
       list[parseInt(tareaCompletada) - 1].completada = true;
     }
+    localStorage.setItem("tareas", JSON.stringify(list));
     mostrarLista();
   }
 }
@@ -83,11 +86,20 @@ function mostrarLista() {
 
   list.forEach((t, index) => {
     let li = document.createElement("li");
-    li.textContent = `${index + 1}: ${t.tarea} - ${t.completada ? "✅ Completada" : "❌ No Completada"}`;
+    li.textContent = `${index + 1}: ${t.tarea} >>> ${t.completada ? "✅ Completada" : "❌ No Completada"}`;
     listaTareas.appendChild(li);
   });
 }
 
+/*
+* @function eliminarLista
+* @Descripcion: Funcion que elimina todas las tareas de la lista
+*/
+function eliminarLista(){
+  list = [];
+  localStorage.removeItem("tareas");
+  mostrarLista();
+}
 //VALIDACIONES
 
 /*
